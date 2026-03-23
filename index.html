@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Reaction Test | Made by johannes_s7</title>
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-DEINE_NUMMER" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/png" sizes="1280x1280" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #f5f5f0; 
+            --card-bg: #ffffff;
+            --text: #2c2c2e;
+            --accent: #d4a373;
+            --border: #e0e0d5;
+            --success: #2a9d8f;
+            --error: #e63946;
+        }
+
+        /* Kein Scrollen erlaubt */
+        html, body {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Georgia', serif;
+            display: flex; flex-direction: column;
+            user-select: none;
+        }
+
+        .main-content {
+            width: 100%; max-width: 700px;
+            margin: 0 auto;
+            padding: 60px 20px 0 20px;
+            display: flex; flex-direction: column; align-items: center;
+            flex-grow: 1;
+        }
+
+        .header h1 { 
+            font-size: 3.5rem; 
+            font-weight: 400; 
+            margin: 0 0 40px 0; 
+            letter-spacing: -1px; 
+            text-align: center; 
+        }
+
+        #game-zone {
+            width: 100%;
+            height: 280px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.1s;
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            border-radius: 2px;
+        }
+
+        .instruction-text {
+            font-family: sans-serif;
+            font-size: 20px;
+            font-weight: bold;
+            pointer-events: none;
+        }
+
+        .result-display {
+            margin-top: 20px;
+            font-family: sans-serif;
+            text-align: center;
+            min-height: 100px;
+        }
+
+        .time-value { font-size: 42px; font-weight: 900; color: var(--accent); }
+        .rank-text { font-size: 18px; opacity: 0.6; margin-top: 5px; }
+
+        .footer-fixed {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: var(--bg); padding: 10px 0 15px 0;
+            display: flex; flex-direction: column; align-items: center; z-index: 1000;
+        }
+        .made-by { font-family: sans-serif; font-size: 12px; opacity: 0.6; margin-bottom: 8px; }
+        .social-links { width: 100%; max-width: 550px; border-top: 1px solid var(--border); padding-top: 15px; display: flex; justify-content: center; gap: 30px; }
+        .social-links a { color: var(--text); text-decoration: underline; font-family: sans-serif; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+        .legal-links { font-size: 12px; opacity: 0.5; margin-top: 20px; font-family: sans-serif; text-align: center; }
+        .legal-links a { color: inherit; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <div class="main-content">
+        <div class="header"><h1>Reaction Test</h1></div>
+        
+        <div id="game-zone" onclick="handleClick()">
+            <div id="msg" class="instruction-text">Klicke, um zu starten</div>
+        </div>
+
+        <div class="result-display">
+            <div id="result-area" style="display: none;">
+                <div class="time-value"><span id="time-ms">0</span> ms</div>
+                <div id="rank" class="rank-text">Status: Menschlich 🚶</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-fixed">
+        <div class="made-by">made by johannes_s7</div>
+        <div class="social-links">
+            <a href="https://www.tiktok.com/@johannas.s7" target="_blank"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+            <a href="https://www.instagram.com/johannessiebecke" target="_blank"><i class="fa-brands fa-instagram"></i> Instagram</a>
+        </div>
+        <div class="legal-links">
+            <a href="privacy.html">Privacy & Policy</a>
+        </div>
+    </div>
+
+    <script>
+        let state = "WAITING"; 
+        let startTime, timerTimeout;
+
+        const zone = document.getElementById('game-zone');
+        const msg = document.getElementById('msg');
+        const resultArea = document.getElementById('result-area');
+        const timeDisplay = document.getElementById('time-ms');
+        const rankDisplay = document.getElementById('rank');
+
+        function handleClick() {
+            if (state === "WAITING" || state === "RESULT") {
+                startTest();
+            } else if (state === "READY") {
+                tooEarly();
+            } else if (state === "ACTIVE") {
+                finishTest();
+            }
+        }
+
+        function startTest() {
+            state = "READY";
+            zone.style.backgroundColor = "var(--card-bg)";
+            msg.innerText = "Warte...";
+            resultArea.style.display = "none";
+            
+            const delay = Math.floor(Math.random() * 3000) + 1200; 
+            timerTimeout = setTimeout(() => {
+                state = "ACTIVE";
+                zone.style.backgroundColor = "var(--accent)";
+                msg.innerText = "JETZT KLICKEN!";
+                startTime = performance.now();
+            }, delay);
+        }
+
+        function tooEarly() {
+            clearTimeout(timerTimeout);
+            state = "RESULT";
+            zone.style.backgroundColor = "var(--error)";
+            msg.innerText = "Zu früh! Versuch's nochmal.";
+        }
+
+        function finishTest() {
+            const endTime = performance.now();
+            const reactionTime = Math.round(endTime - startTime);
+            state = "RESULT";
+            
+            zone.style.backgroundColor = "var(--success)";
+            msg.innerText = "Klicke zum Neustarten";
+            
+            timeDisplay.innerText = reactionTime;
+            resultArea.style.display = "block";
+            
+            if (reactionTime < 180) rankDisplay.innerText = "Status: Wie der Blitz! ⚡";
+            else if (reactionTime < 250) rankDisplay.innerText = "Status: Gepard 🐆";
+            else if (reactionTime < 300) rankDisplay.innerText = "Status: Schnell ⚡";
+            else if (reactionTime < 600) rankDisplay.innerText = "Status: Menschlich 🚶";
+            else rankDisplay.innerText = "Status: Schildkröte 🐢";
+
+            if (reactionTime < 300) {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            }
+        }
+    </script>
+</body>
+</html>
