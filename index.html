@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Reaction Test</title>
     
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-DEINE_NUMMER" crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3036128934622320" crossorigin="anonymous"></script>
     <link rel="icon" type="image/png" sizes="1280x1280" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -21,7 +21,6 @@
             --error: #e63946;
         }
 
-        /* Kein Scrollen erlaubt */
         html, body {
             margin: 0; padding: 0;
             width: 100%; height: 100%;
@@ -31,6 +30,13 @@
             font-family: 'Georgia', serif;
             display: flex; flex-direction: column;
             user-select: none;
+        }
+
+        /* Logo Styling */
+        .header img {
+            height: 60px;
+            margin-bottom: 20px;
+            cursor: pointer;
         }
 
         .main-content {
@@ -98,7 +104,10 @@
 <body>
 
     <div class="main-content">
-        <div class="header"><h1>Reaction Test</h1></div>
+        <div class="header">
+            <a href="https://johanness7.github.io/"><img src="logo.png" alt="s7 hub logo"></a>
+            <h1>Reaction Test</h1>
+        </div>
         
         <div id="game-zone" onclick="handleClick()">
             <div id="msg" class="instruction-text">Klicke, um zu starten</div>
