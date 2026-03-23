@@ -32,25 +32,25 @@
             user-select: none;
         }
 
-        /* HEADER & LOGO STYLING FÜR ZENTRIERUNG */
+        /* HEADER ANPASSUNG FÜR ZENTRIERUNG */
         .header {
             display: flex;
-            flex-direction: column; /* Stapelt Logo über Titel */
-            align-items: center;    /* Zentriert beide horizontal */
+            flex-direction: column;
+            align-items: center;
             width: 100%;
-            margin-bottom: 40px;    /* Abstand zum Spiel-Container */
+            margin-bottom: 40px;
         }
 
         .header img {
             height: 60px;
-            margin-bottom: 20px;    /* Abstand zwischen Logo und Titel */
+            margin-bottom: 20px;
             cursor: pointer;
         }
 
         .header h1 { 
             font-size: 3.5rem; 
             font-weight: 400; 
-            margin: 0;              /* Margins entfernt, da Header steuert */
+            margin: 0; 
             letter-spacing: -1px; 
             text-align: center; 
         }
@@ -129,5 +129,80 @@
         </div>
     </div>
 
-    </body>
+    <div class="footer-fixed">
+        <div class="made-by">made by johannes_s7</div>
+        <div class="social-links">
+            <a href="https://www.tiktok.com/@johannas.s7" target="_blank"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+            <a href="https://www.instagram.com/johannessiebecke" target="_blank"><i class="fa-brands fa-instagram"></i> Instagram</a>
+        </div>
+        <div class="legal-links">
+            <a href="privacy.html">Privacy & Policy</a>
+        </div>
+    </div>
+
+    <script>
+        let state = "WAITING"; 
+        let startTime, timerTimeout;
+
+        const zone = document.getElementById('game-zone');
+        const msg = document.getElementById('msg');
+        const resultArea = document.getElementById('result-area');
+        const timeDisplay = document.getElementById('time-ms');
+        const rankDisplay = document.getElementById('rank');
+
+        function handleClick() {
+            if (state === "WAITING" || state === "RESULT") {
+                startTest();
+            } else if (state === "READY") {
+                tooEarly();
+            } else if (state === "ACTIVE") {
+                finishTest();
+            }
+        }
+
+        function startTest() {
+            state = "READY";
+            zone.style.backgroundColor = "var(--card-bg)";
+            msg.innerText = "Warte...";
+            resultArea.style.display = "none";
+            
+            const delay = Math.floor(Math.random() * 3000) + 1200; 
+            timerTimeout = setTimeout(() => {
+                state = "ACTIVE";
+                zone.style.backgroundColor = "var(--accent)";
+                msg.innerText = "JETZT KLICKEN!";
+                startTime = performance.now();
+            }, delay);
+        }
+
+        function tooEarly() {
+            clearTimeout(timerTimeout);
+            state = "RESULT";
+            zone.style.backgroundColor = "var(--error)";
+            msg.innerText = "Zu früh! Versuch's nochmal.";
+        }
+
+        function finishTest() {
+            const endTime = performance.now();
+            const reactionTime = Math.round(endTime - startTime);
+            state = "RESULT";
+            
+            zone.style.backgroundColor = "var(--success)";
+            msg.innerText = "Klicke zum Neustarten";
+            
+            timeDisplay.innerText = reactionTime;
+            resultArea.style.display = "block";
+            
+            if (reactionTime < 180) rankDisplay.innerText = "Status: Wie der Blitz! ⚡";
+            else if (reactionTime < 250) rankDisplay.innerText = "Status: Gepard 🐆";
+            else if (reactionTime < 300) rankDisplay.innerText = "Status: Schnell ⚡";
+            else if (reactionTime < 600) rankDisplay.innerText = "Status: Menschlich 🚶";
+            else rankDisplay.innerText = "Status: Schildkröte 🐢";
+
+            if (reactionTime < 300) {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            }
+        }
+    </script>
+</body>
 </html>
