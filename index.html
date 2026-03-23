@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Reaction Test</title>
+    <title>Reaktions-Test</title>
     
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3036128934622320" crossorigin="anonymous"></script>
     <link rel="icon" type="image/png" sizes="1280x1280" href="favicon.png">
@@ -32,7 +32,6 @@
             user-select: none;
         }
 
-        /* HEADER ANPASSUNG FÜR ZENTRIERUNG */
         .header {
             display: flex;
             flex-direction: column;
@@ -114,11 +113,11 @@
     <div class="main-content">
         <div class="header">
             <a href="https://johanness7.github.io/"><img src="logo.png" alt="s7 hub logo"></a>
-            <h1>Reaction Test</h1>
+            <h1>Reaktions-Test</h1>
         </div>
         
         <div id="game-zone" onclick="handleClick()">
-            <div id="msg" class="instruction-text">Klicke, um zu starten</div>
+            <div id="msg" class="instruction-text">Klicke zum Starten</div>
         </div>
 
         <div class="result-display">
@@ -136,7 +135,7 @@
             <a href="https://www.instagram.com/johannessiebecke" target="_blank"><i class="fa-brands fa-instagram"></i> Instagram</a>
         </div>
         <div class="legal-links">
-            <a href="privacy.html">Privacy & Policy</a>
+            <a href="privacy.html">Datenschutz & Richtlinien</a>
         </div>
     </div>
 
@@ -163,7 +162,7 @@
         function startTest() {
             state = "READY";
             zone.style.backgroundColor = "var(--card-bg)";
-            msg.innerText = "Warte...";
+            msg.innerText = "Warten...";
             resultArea.style.display = "none";
             
             const delay = Math.floor(Math.random() * 3000) + 1200; 
@@ -179,7 +178,7 @@
             clearTimeout(timerTimeout);
             state = "RESULT";
             zone.style.backgroundColor = "var(--error)";
-            msg.innerText = "Zu früh! Versuch's nochmal.";
+            msg.innerText = "Zu früh! Versuch es nochmal.";
         }
 
         function finishTest() {
@@ -188,7 +187,7 @@
             state = "RESULT";
             
             zone.style.backgroundColor = "var(--success)";
-            msg.innerText = "Klicke zum Neustarten";
+            msg.innerText = "Klicke für Neustart";
             
             timeDisplay.innerText = reactionTime;
             resultArea.style.display = "block";
